@@ -6,7 +6,8 @@ COM.Credits = "https://github.com/Xsotou"
 
 COM.Settings = {
     ["credits"] = true,
-    ["clear"] = true
+    ["clear"] = true,
+    ["exclude"] = {}
 }
 
 --// Settings
@@ -62,7 +63,26 @@ COM.build = function(location)
         print("[BUILT CATS ON MARS]: Version " .. COM.Version .. " | " .. COM.VersionName .. "\n" .. COM.Credits .. "\n\n")
     end
 
+
+
+
     --// Build
+    for _,Exclusion in next, COM.Settings["exclude"] do
+        for Module, Callback in next, COM do
+            if string.lower(Module) == string.lower(Exclusion) then
+                COM[Module] = nil
+            end
+        end
+    end
+    
+    setmetatable(COM, {
+        __index = function(tab, module)
+            return function()
+                print("[COM] | This build does not contain a module called " .. module .. " (is nil). If you are using a custom build, ensure it is included. Otherwise, make sure all exclusions are handled appropriately and you have built correctly")
+            end
+        end
+    })
+
     if location then location = COM end
 end
 
