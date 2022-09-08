@@ -7,6 +7,7 @@ COM.Credits = "https://github.com/Xsotou"
 COM.Settings = {
     ["credits"] = true,
     ["clear"] = true,
+    ["unix"] = false,
     ["exclude"] = {}
 }
 
@@ -23,10 +24,15 @@ end
 COM.build = function(location)
 
     if COM.Settings["clear"] then
-        os.execute("cls")
+        if COM.Settings["unix"] then
+            os.execute("clear")
+        else
+            os.execute("cls")
+        end
     end
 
     COM.Clear = function(isUnix)
+        --very unreliable, its probably better just to use sequence clearing
         if isUnix then
             os.execute("clear")
         else
